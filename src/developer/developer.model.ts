@@ -11,7 +11,6 @@ import {
 import { ObjectType, Field } from '@nestjs/graphql';
 import { ProjectModel } from 'src/project/project.model';
 import { RoleModel } from 'src/role/role.model';
-// import { RoleModel } from 'src/role/role.model';
 
 @ObjectType()
 @Entity()
