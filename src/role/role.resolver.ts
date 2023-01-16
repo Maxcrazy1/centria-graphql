@@ -2,7 +2,7 @@ import { RoleService } from './role.service';
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { Inject, UsePipes } from '@nestjs/common';
 import { RoleModel } from './role.model';
-import NestjsGraphqlValidator from 'nestjs-graphql-validator';
+import { CreateRoleDTO } from './role.dto';
 
 @Resolver((of) => RoleModel)
 export class RoleResolver {
@@ -18,16 +18,11 @@ export class RoleResolver {
   }
 
   @Mutation((returns) => RoleModel)
-  @UsePipes(
-    new NestjsGraphqlValidator({
-      name: { minLen: 1, maxLen: 150 },
-    }),
-  )
-  async createRole(@Args('name') name: string): Promise<RoleModel> {
-    const roleExists = await this.roleService.findByName(name);
+  async createRole(@Args('role') roleDto: CreateRoleDTO): Promise<RoleModel> {
+    const roleExists = await this.roleService.findByName(roleDto.name);
 
     if (!roleExists) {
-      return await this.roleService.create({ name });
+      return await this.roleService.create(roleDto);
     }
 
     return roleExists;
